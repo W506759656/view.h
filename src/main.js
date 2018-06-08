@@ -13,7 +13,7 @@ window.axios = axios;
 axios.defaults.withCredentials=true;
 
 if (process.env.NODE_ENV !== 'development') {
-  Vue.prototype.URL_PREFIX = 'http://122.152.231.165/api/'
+  Vue.prototype.URL_PREFIX = 'http://122.152.231.165/api'
 } else {
   Vue.prototype.URL_PREFIX = 'http://122.152.231.165/api'
 }
