@@ -43,16 +43,21 @@
             handleSubmit(name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        axios.post(this.URL_PREFIX+'login',{
+                        axios.post(this.URL_PREFIX+'/auth/login',{
                             email:this.formInline.email,
-                            password:this.formInline.email,
+                            password:this.formInline.password,
                         }).then(res=>{
-                            console.log(res);
+                            if(res.data) {
+                                this.$store.dispatch('logined', res.data.token)
+                                this.$Message.success('Success!');
+                            }
                         })
-                        this.$Message.success('Success!');
                     } else {
                     }
                 })
+            },
+            test(){
+                console.log(localStorage.token);
             }
         }
     }

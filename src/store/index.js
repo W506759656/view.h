@@ -29,9 +29,7 @@ export default new Vuex.Store({
         // 登录成功后拉取用户的信息存储到本地
         profile(state, data) {
             state.name = data.name
-            state.mobile = data.mobile
-            state.avatar = data.avatar
-            state.remark = data.remark
+            state.email = data.email
         },
         // 用户登出，清除本地数据
         logout(state){
@@ -51,8 +49,10 @@ export default new Vuex.Store({
             return new Promise(function (resolve, reject) {
                 commit('logined', token)
                 axios.defaults.headers.common['Authorization'] = token
+                localStorage.setItem('token',token)
                 dispatch('profile').then(() => {
                     resolve()
+                    location.href = '/';
                 }).catch(() => {
                     reject()
                 })
@@ -61,7 +61,7 @@ export default new Vuex.Store({
         // 登录成功后使用 token 拉取用户的信息
         profile({commit}) {
             return new Promise(function (resolve, reject) {
-                axios.get('profile', {}).then(respond => {
+                axios.get('http://122.152.231.165/api/getAuthenticatedUser', {}).then(respond => {
                     if (respond.status == 200) {
                         commit('profile', respond.data)
                         resolve()
@@ -69,15 +69,14 @@ export default new Vuex.Store({
                         reject()
                     }
                 })
+                location.href = '/';
             })
         },
         // 用户登出，清除本地数据并重定向至登录页面
         logout({commit}) {
             return new Promise(function (resolve, reject) {
                 commit('logout')
-                axios.post('auth/logout', {}).then(respond => {
-                    Vue.$router.push({name:'login'})
-                })
+                location.href = 'auth/login';
             })
         },
         // 将刷新的 token 保存至本地

@@ -6,14 +6,16 @@ import router from './router'
 import iView from 'iview'
 import axios from 'axios'
 import store from './store'
+axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
+
 window.axios = axios;
 
 axios.defaults.withCredentials=true;
 
 if (process.env.NODE_ENV !== 'development') {
-  Vue.prototype.URL_PREFIX = 'http://122.152.231.165/'
+  Vue.prototype.URL_PREFIX = 'http://122.152.231.165/api/'
 } else {
-  Vue.prototype.URL_PREFIX = 'http://122.152.231.165/'
+  Vue.prototype.URL_PREFIX = 'http://122.152.231.165/api'
 }
 
 import 'iview/dist/styles/iview.css'
@@ -39,7 +41,6 @@ new Vue({
             return response
         }, (error) => {
             switch (error.response.status) {
-
                 // 如果响应中的 http code 为 401，那么则此用户可能 token 失效了之类的，我会触发 logout 方法，清除本地的数据并将用户重定向至登录页面
                 case 401:
                     return this.$store.dispatch('logout')
